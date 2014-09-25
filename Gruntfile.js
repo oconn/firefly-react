@@ -1,5 +1,5 @@
 var path = require('path');
-var gruntConfig = require('./config/grunt');
+var gruntConfig = require('./config/grunt_config');
 
 module.exports = function(grunt) {
     
@@ -115,9 +115,9 @@ module.exports = function(grunt) {
                 ],
                 bundleExec: true
             },
-            dist: {
+            compile: {
                 files: {
-                    'front/public/styles/main.css': 'front/src/styles/main.scss'
+                    'front/src/styles/main.css': 'front/src/styles/main.scss'
                 }
             }
         },
@@ -159,11 +159,11 @@ module.exports = function(grunt) {
                     'front/src/vendor/handlebars.js/handlebars.runtime.js',
                     'front/src/scripts/templates/helpers.js'
                 ],
-                dest: 'app/public/scripts/handlebars.js'
+                dest: 'front/public/scripts/handlebars.js'
             },
             js: {
                 src: [
-                    'app/public/packages/almond/almond.js',
+                    'front/public/packages/almond/almond.js',
                     'dist/build/public/scripts/app.js'
                 ],
                 dest: 'dist/release/public/scripts/app.js'
@@ -177,6 +177,19 @@ module.exports = function(grunt) {
             assets: {
                 files: gruntConfig.assetFiles
             }
+        },
+        
+        requirejs: {
+            compile: {
+                options: {
+                    name: 'main',
+                    baseUrl: './front/src/scripts/',
+                    mainConfigFile: './front/src/scripts/main.js',
+                    out: './front/public/scripts/app.js',
+                    optimize: 'none',
+                    include: ['vendor/require.js']
+                }
+            }
         }
     });
 
@@ -187,7 +200,8 @@ module.exports = function(grunt) {
         'contrib-handlebars',
         'contrib-copy',
         'contrib-jasmine',
-        'contrib-concat'
+        'contrib-concat',
+        'contrib-requirejs'
     ], function(task) {
         grunt.loadNpmTasks('grunt-' + task);
     });
@@ -195,6 +209,11 @@ module.exports = function(grunt) {
     grunt.registerTask('templates', [
         'handlebars:compile',
         'concat:handlebars'
+    ]);
+
+    grunt.registerTask('release', [
+        'requirejs',
+        'copy:release'
     ]);
 };
 
@@ -207,12 +226,15 @@ grunt watch
 
 - monitors .hbs templates and compiles them
 - monitors .js app & server (jshint)
-- monitors .scss & compiles to .css in public
+- monitors .scss & compiles to .css in src
 - monitors assets & copys to public
 
 grunt copy:build 
 
 - copys minimum files from bower to src (run first time)
 
+grunt release
+
+- runs r.js to package js files and copys main.css to public
 */
 

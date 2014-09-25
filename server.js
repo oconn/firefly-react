@@ -17,11 +17,9 @@ var express = require('express'),
     database = require('./config/database'),
     routes = require('./back/routes'),
     env = process.env.NODE_ENV || 'development';
-    
-    // Run 'NODE_ENV=production nodemon bin/www' to source public dir
-    // staticDir = env === 'production' ? 'dist' : null;
 
-var app = express();
+var app = express(),
+    staticPath = env === 'production' ? 'front/public' : 'front/src';
 
 // Set up the view engine
 app.set('views', path.join(__dirname, 'back', 'views'));
@@ -29,7 +27,7 @@ app.set('view engine', 'jade');
 
 // Middleware
 // app.use(cors());
-app.use('/', express['static'](path.join(__dirname, 'front')));
+app.use('/', express['static'](path.join(__dirname, staticPath)));
 // app.use(favicon(__dirname, + '/frontend/favicon.ico'));
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -52,7 +50,7 @@ var db = MongoClient.connect(database.url, function(err, db) {
     app.use(passport.session());
 
     routes(app, db, passport);
-    require('util').log("Connected to MongoDB on port " + database.port);
+    require('util').log("Connected to MongoDB on port(s) " + database.servers);
 });
 
 module.exports = app;
