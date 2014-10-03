@@ -1,7 +1,9 @@
 packages
 node_modules
 
+
 frontend/public/packages
 .DS_Store
 .sass-cache
+.swp
 Gemfile.lock

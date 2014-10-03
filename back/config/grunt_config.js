@@ -49,20 +49,16 @@ options.buildFiles = [
         dest: 'front/src/scripts/vendor/marionette.formview.js'
     },
     {
-        src: 'packages/chosen/chosen.jquery.js',
-        dest: 'front/src/scripts/vendor/chosen.jquery.js'
-    },
-    {
         src: 'packages/lodash/dist/lodash.js',
         dest: 'front/src/scripts/vendor/lodash.js'
     },
     {
         src: 'packages/modernizr/modernizr.js',
-        dest: 'front/public/scripts/modernizr.js'
-    },  
+        dest: 'front/src/scripts/vendor/modernizr.js'
+    },
     {
-        src: 'front/src/scripts/login.js',
-        dest: 'front/public/scripts/login.js'
+        src: 'packages/fastclick/lib/fastclick.js',
+        dest: 'front/src/scripts/vendor/fastclick.js'
     }
 ];
 
@@ -83,8 +79,8 @@ options.assetFiles = [
 
 options.releaseFiles = [
     {
-        src: 'front/src/styles/main.css',
-        dest: 'front/public/styles/main.css'
+        src: 'front/src/styles/app.css',
+        dest: 'front/public/styles/app.css'
     }
 ];
 

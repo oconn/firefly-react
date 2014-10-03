@@ -8,7 +8,7 @@ require.config({
         'backbone.babysitter': 'vendor/backbone.babysitter',
         'handlebars': 'vendor/handlebars',
         'marionette.formview': 'vendor/marionette.formview',
-        'chosen': 'vendor/chosen.jquery'
+        'fastclick': 'vendor/fastclick'
     },
     shim: {
         'jquery': {
@@ -29,7 +29,7 @@ require.config({
             exports: 'Handlebars'
         }
     },
-    baseUrl: 'src/scripts/',
+    baseUrl: '/scripts/',
     name: "main",
     out: "dist/main.js",
     removeCombined: true
