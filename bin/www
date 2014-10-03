@@ -1,10 +1,19 @@
 #!/usr/bin/env node
-var app = require('../server');
+var path = require('path'),
+    log = require('util').log;
 
-app.set('port', process.env.PORT || 8000);
+global.__base = path.join(__dirname, '..');
+global.__env = process.env.NODE_ENV || 'development';
 
-var server = app.listen(app.get('port'), function() {
-  console.log('Server listening on port ' + server.address().port);
-  var env = process.env.NODE_ENV || 'development';
-  console.log('NODE_ENV = ' + env);
+var promise = require('../back/server');
+
+promise.then(function(app) {
+    app.set('port', process.env.NODE_PORT || 8000);
+    var server = app.listen(app.get('port'), function() {
+      log('Server listening on port ' + server.address().port);
+      log('NODE_ENV = ' + __env);
+    });
+}).then(undefined, function(err) {
+    log(err);
+    log('Failed to connect to MongoDB.');
 });

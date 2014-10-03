@@ -1,16 +1,14 @@
-var _ = require('lodash'),
-    port = 27017,
-    dbName = 'mjodev',
-    env = process.env.NODE_ENV || 'dev',
-    userName = process.env.MJO_MONGODB_USERNAME,
-    password = process.env.MJO_MONGODB_PASSWORD,
-    ips = [],
-    servers = '',
-    url = '';
+var config = require('./master');
+
+var servers = config.dbServers,
+    dbName = config.dbName,
+    userName = config.dbUserName,
+    password = config.dbPassword,
+    url; 
 
 function buildMongoServerString() {
-    _.each(ips, function(ip) {
-        url += ip.ip + ':' + ip.port + ',';
+    servers.forEach(function(server) {
+        url += server.ip + ':' + server.port + ',';
     });
 
     return url.slice(0, -1);
@@ -21,15 +19,14 @@ function buildServerString(url) {
 }
 
 function buildMongoURL(url) {
-    if (env === 'production') {
-        url += '/' + dbName;
-    } else {
-        url += '/' + dbName + '_' + env;
-    }
+    __env === 'production' ?
+        url += '/' + dbName :
+        url += '/' + dbName + '_' + __env;
+    
     return 'mongodb://' + userName + ':' + password + '@' + url;
 }
 
-switch (env) {
+switch (__env) {
 case 'local_development':
     url = 'mongodb://127.0.0.1:27017/' + dbName;
     servers = '127.0.0.1\n';
@@ -47,3 +44,4 @@ module.exports = {
     url: url,
     servers: servers
 };
+

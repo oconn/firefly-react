@@ -1,5 +1,5 @@
 var path = require('path');
-var gruntConfig = require('./config/grunt_config');
+var gruntConfig = require('./back/config/grunt_config');
 
 module.exports = function(grunt) {
     
@@ -98,12 +98,8 @@ module.exports = function(grunt) {
                 '!front/src/scripts/templates/**/*.js'
             ],
             server: [
-                'server.js',
                 'back/**/*.js',
-                'config/**/*.js',
-                'Gruntfile.js',
-                'test/spec/**/*.js',
-                'utils/**/*.js'
+                'Gruntfile.js'
             ]
         },
 
