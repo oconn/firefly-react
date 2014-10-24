@@ -1,19 +1,14 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'marionette'
-], function(
-    $,
-    _,
-    Backbone,
-    Marionette
-) {
-    "use strict";
-    
-    var Router = Backbone.Router.extend({
+define(function(require) {
+    'use strict';
 
+    var $ = require('jquery'),
+        _ = require('underscore'),
+        Backbone = require('backbone'),
+        Marionette = require('marionette');
+   
+    var Router = Backbone.Router.extend({
+    
     });
 
-    return Router;
+   return Router; 
 });

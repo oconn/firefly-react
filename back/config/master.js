@@ -7,12 +7,16 @@ var mongodbServers = [
     }
 ];
 
-module.exports = {
+var database = {
     dbPort: 27017,
     dbName: dbName,
     dbServers: mongodbServers,
     dbUserName: process.env[dbName.toUpperCase() + '_MONGODB_USERNAME'],
     dbPassword: process.env[dbName.toUpperCase() + '_MONGODB_PASSWORD']
+};
+
+module.exports = {
+    database: database 
 };
 
 /* **** ENVIRONMENT VARIABLES **** /

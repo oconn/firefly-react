@@ -1,21 +1,12 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'marionette',
-    'state',
+define(function(require) {
+    'use strict';
 
-    'routers/appRouter'
-], function(
-    $,
-    _,
-    Backbone,
-    Marionette,
-    state,
-
-    Router
-) {
-    "use strict";
+    var $ = require('jquery'),
+        _ = require('underscore'),
+        Backbone = require('backbone'),
+        Marionette = require('marionette'),
+        state = require('state'),
+        Router = require('routers/appRouter');
     
     var App = Backbone.Marionette.Application.extend({
 

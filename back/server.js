@@ -21,7 +21,7 @@ module.exports = new Promise(function(resolve, reject) {
         // Start Routes
         routes(app, db, passport);
     
-        log("Connected to MongoDB on port(s) " + database.servers);
+        log("Connected to MongoDB on port(s)\n" + database.servers);
 
         resolve(app);
         return;

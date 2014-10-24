@@ -20,7 +20,7 @@ module.exports = function(db, passport) {
     app.set('view engine', 'jade');
     
     // Middleware
-    app.use('/', express.static(staticPath));
+    app.use('/', express['static'](staticPath));
     if (__env !== 'production') {
         app.use(morgan('dev'));
     }
@@ -33,7 +33,7 @@ module.exports = function(db, passport) {
         resave: true,
         store: new MongoStore({
             db: db,
-            collection: 'sessions',
+            collection: 'sessions'
         })
     }));
     

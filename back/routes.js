@@ -9,8 +9,12 @@ function isAuthed(req, res, next) {
 
 module.exports = function(app, db, passport) {
     var staticPagesController = require('./controllers/staticPagesController');
-        
     
+    // ************** TESTS ************** //
+    if (__env !== 'production') {
+        app.get('/_test', staticPagesController.tests);
+    }
+
     // *********************************** //
     // *************** API *************** //
     // *********************************** //

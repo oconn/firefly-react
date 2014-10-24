@@ -59,6 +59,24 @@ options.buildFiles = [
     {
         src: 'packages/fastclick/lib/fastclick.js',
         dest: 'front/src/scripts/vendor/fastclick.js'
+    },
+    {
+        src: 'node_modules/mocha/mocha.js',
+        dest: 'front/src/scripts/vendor/mocha.js'
+    },
+    {
+        src: 'node_modules/chai/chai.js',
+        dest: 'front/src/scripts/vendor/chai.js'
+    },
+    {
+        expand: true,
+        cwd: 'node_modules/sinon/lib',
+        src: ['**/*'],
+        dest: 'front/src/scripts/vendor/'
+    },
+    {
+        src: 'node_modules/sinon-chai/lib/sinon-chai.js',
+        dest: 'front/src/scripts/vendor/sinon-chai.js'
     }
 ];
 

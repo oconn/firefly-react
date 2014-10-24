@@ -4,7 +4,7 @@ var servers = config.dbServers,
     dbName = config.dbName,
     userName = config.dbUserName,
     password = config.dbPassword,
-    url; 
+    url = ''; 
 
 function buildMongoServerString() {
     servers.forEach(function(server) {
@@ -33,11 +33,17 @@ case 'local_development':
     break;
 // Fallthrough Intended
 case 'development':
-case 'production': 
-    url = buildMongoServerString();
-    servers = buildServerString(url);
-    url = buildMongoURL(url);
-    break;
+case 'production':
+    if (userName && password) {
+        url = buildMongoServerString();
+        servers = buildServerString(url);
+        url = buildMongoURL(url);
+        break;
+    } else {
+        throw new Error(
+            'Make sure environment variables are set for your database connection.'
+        );
+    }
 }
 
 module.exports = {

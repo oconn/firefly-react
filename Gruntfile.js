@@ -3,8 +3,6 @@ var gruntConfig = require('./back/config/grunt_config');
 
 module.exports = function(grunt) {
     
-    var env = grunt.option('env') || 'dev';
-    
     grunt.initConfig({
         
         pkg: grunt.file.readJSON('package.json'),
@@ -47,7 +45,23 @@ module.exports = function(grunt) {
                 tasks: [
                     'copy:assets'
                 ]
+            },
+            tests: {
+                files: '<%= jshint.tests %>',
+                tasks: ['jshint:tests']
             }
+        },
+        
+        nodemon: {
+            dev_local: {
+                script: 'bin/www',
+                options: {
+                    env: {
+                        NODE_ENV: 'local_development'
+                    },
+                    watch: 'back'
+                }
+            } 
         },
 
         jshint: {
@@ -64,6 +78,7 @@ module.exports = function(grunt) {
                 boss: true,
                 eqnull: true,
                 browser: true,
+                expr: true,
                 es3: true,
                 globals: {
                     // for node/browser compat
@@ -71,14 +86,17 @@ module.exports = function(grunt) {
                     "module": false,
                     "Buffer": false,
                     "process": false,
+                    "Promise": true,
                     "__dirname": false,
-                    'static': false,
+                    "__env": false,
+                    "__base": false,
                     // requirejs
                     "define": false,
                     "require": true,
                     // handlebars, for helpers file
                     "Handlebars": false,
-                    // jasmine
+                    // mocha
+                    'mocha': false,
                     "beforeEach": false,
                     "describe": false,
                     "xdescribe": false,
@@ -95,11 +113,15 @@ module.exports = function(grunt) {
             front: [
                 'front/src/scripts/**/*.js',
                 '!front/src/scripts/vendor/**/*.js',
-                '!front/src/scripts/templates/**/*.js'
+                '!front/src/scripts/templates/**/*.js',
+                '!front/src/scripts/specs/**/*.js'
             ],
             server: [
                 'back/**/*.js',
                 'Gruntfile.js'
+            ],
+            tests: [
+                'front/src/scripts/specs/**/*.js'
             ]
         },
 
@@ -113,7 +135,7 @@ module.exports = function(grunt) {
             },
             compile: {
                 files: {
-                    'front/src/styles/main.css': 'front/src/styles/main.scss'
+                    'front/src/styles/app.css': 'front/src/styles/main.scss'
                 }
             }
         },
@@ -186,6 +208,20 @@ module.exports = function(grunt) {
                     include: ['vendor/require.js']
                 }
             }
+        },
+
+        mochacli: {
+            options: {
+                require: [
+                    'should',
+                    'sinon',
+                    'nock',
+                    'supertest'
+                ]
+            },
+            'all': ['back/test/**/*.js', 'front/src/test/**/*.js'],
+            'front': ['front/src/test/**/*.js'],
+            'back': ['back/test/**/*.js']
         }
     });
 
@@ -195,9 +231,10 @@ module.exports = function(grunt) {
         'contrib-sass',
         'contrib-handlebars',
         'contrib-copy',
-        'contrib-jasmine',
         'contrib-concat',
-        'contrib-requirejs'
+        'contrib-requirejs',
+        'mocha-cli',
+        'nodemon'
     ], function(task) {
         grunt.loadNpmTasks('grunt-' + task);
     });
@@ -210,6 +247,15 @@ module.exports = function(grunt) {
     grunt.registerTask('release', [
         'requirejs',
         'copy:release'
+    ]);
+
+    grunt.registerTask('test', [
+        'mochacli:back',
+        'mochacli:front'
+    ]);
+
+    grunt.registerTask('start:local', [
+        'nodemon:dev_local'
     ]);
 };
 

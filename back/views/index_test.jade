@@ -13,8 +13,7 @@ html.no-js
     title(NODE Template)
     meta(name='description', content='')
     meta(name='viewport', content='width=device-width, initial-scale=1 user-scalable=no')
-    
-    link(rel='stylesheet', href='/styles/app.css')
+    link(rel='stylesheet', href='/styles/mocha.css')
     
     //- script
     //-   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -26,6 +25,8 @@ html.no-js
 
   body
 
-    div(id="app-wrapper")
-    
+    div(id="mocha")
+          
+    script(src='/scripts/vendor/mocha.js')
+    script(src='/scripts/vendor/chai.js')        
     script(data-main="/scripts/config" src="/scripts/vendor/require.js")
