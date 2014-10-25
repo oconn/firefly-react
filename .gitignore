@@ -1,7 +1,7 @@
 packages
 node_modules
 
-frontend/public/packages
+front/src/scripts/vendor
 .DS_Store
 .sass-cache
 *.swp
