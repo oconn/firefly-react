@@ -210,18 +210,13 @@ module.exports = function(grunt) {
             }
         },
 
-        mochacli: {
-            options: {
-                require: [
-                    'should',
-                    'sinon',
-                    'nock',
-                    'supertest'
-                ]
-            },
-            'all': ['back/test/**/*.js', 'front/src/test/**/*.js'],
-            'front': ['front/src/test/**/*.js'],
-            'back': ['back/test/**/*.js']
+        mocha: {
+            test: {
+                options: {
+                    log: true
+                },
+                src: ['front/src/test.html']
+            }             
         }
     });
 
@@ -233,7 +228,7 @@ module.exports = function(grunt) {
         'contrib-copy',
         'contrib-concat',
         'contrib-requirejs',
-        'mocha-cli',
+        'mocha',
         'nodemon'
     ], function(task) {
         grunt.loadNpmTasks('grunt-' + task);
@@ -250,8 +245,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test', [
-        'mochacli:back',
-        'mochacli:front'
+        'mocha'
     ]);
 
     grunt.registerTask('start:local', [

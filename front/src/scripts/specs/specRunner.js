@@ -1,6 +1,5 @@
 define(function(require) {
     require('jquery');
-    require('mocha');
     var chai = require('chai'),
         sinon = require('sinon'),
         sinonChai = require('sinon-chai');
@@ -8,7 +7,7 @@ define(function(require) {
     window.expect = chai.expect;
     chai.use(sinonChai);
 
-    mocha.setup('bdd');
+    window.mocha.setup('bdd');
     
     var tests = [
         // Models
@@ -19,6 +18,6 @@ define(function(require) {
     ];
     
     require(tests, function() {
-        mocha.run();
+        window.mocha.run();
     });
 });
