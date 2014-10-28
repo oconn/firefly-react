@@ -1,11 +1,12 @@
 {
-    "name": "firefly",
+    "name": "node_flux_react",
     "version": "0.0.1",
     "private": true,
     "repository": {
-        
+        "type": "git",
+        "url": "https://github.com/oconn/node_flux_react.gi://github.com/oconn/node_flux_react.git"
     },
-    
+    "main": "app/js/app.js", 
     "dependencies": {
         "express": "~4.0.0",
         "express-session": "~1.7.0",
@@ -14,33 +15,26 @@
         "serve-favicon": "~2.0.1",
         "morgan": "~1.2.0",
         "cookie-parser": "~1.3.2",
-        
-        "request": "~2.40.0",
-        "cors": "~2.4.1",
-        "jade": "~1.5.0",
-        "lodash": "~2.4.1",
-        "mongodb": "~1.4.9",
-        "connect-mongo": "~0.4.1",
-        "passport": "~0.2.0",
-        "bcrypt": "~0.8.0",
-        "passport-google-oauth": "~0.1.5",
-        "passport-local": "~1.0.0",
-        "es6-promise": "~1.0.0",
-        "mocha": "~2.0.1",
-        "chai": "~1.9.2",
-        "sinon": "~1.10.3",
-        "sinon-chai": "~2.6.0",
-
-        "grunt": "~0.4.5",
-        "grunt-contrib-clean": "~0.5.0",
-        "grunt-contrib-copy": "~0.5.0",
-        "grunt-contrib-jshint": "~0.10.0",
-        "grunt-contrib-handlebars": "~0.8.0",
+        "jade": "~1.5.0"
+    },
+    "devDependencies" : {
         "grunt-contrib-watch": "~0.6.1",
-        "grunt-contrib-sass": "~0.7.3",
-        "grunt-contrib-concat": "~0.5.0",
-        "grunt-contrib-requirejs": "~0.4.4",
-        "grunt-mocha": "~0.4.11",
-        "grunt-nodemon": "~0.3.0"
-    }   
+        "grunt-contrib-sass": "~0.8.1",
+        "grunt-contrib-copy": "~0.7.0",
+        "grunt-concurrent": "~1.0.0",
+        "grunt-browserify": "~3.1.0",
+        "grunt-jsxhint": "~0.3.0",
+        "grunt-nodemon": "~0.3.0",
+
+        "envify": "~2.0.1",
+        "reactify": "~0.14.0",
+        "jest-cli" : "~0.1.17",
+        "react-tools": "~0.11.2"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "jest": {
+        "rootDir": "./app/src/js"
+    }
 }

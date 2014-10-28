@@ -1,8 +1,10 @@
 packages
-node_modules
-
-front/src/scripts/vendor
 .DS_Store
 .sass-cache
 *.swp
+
 Gemfile.lock
+node_modules
+
+app/public
+app/dist

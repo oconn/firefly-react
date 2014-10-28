@@ -1,5 +1,4 @@
-var path = require('path');
-var gruntConfig = require('./back/config/grunt_config');
+var gruntConfig = require('./server/config/grunt_config');
 
 module.exports = function(grunt) {
     
@@ -10,119 +9,40 @@ module.exports = function(grunt) {
 
         watch: {
             sass: {
-                files: [
-                    'front/src/styles/**/*.scss',
-                    '!front/src/styles/fontawesome/**'
-                ],
+                files: [ 'app/src/scss/**/*.scss' ],
+                options: { livereload: true },
                 tasks: [ 'sass' ]
             },
-            jsFront: {
-                files: '<%= jshint.front %>',
-                tasks:
-                [
-                    'jshint:front'
-                ]
+            app: {
+                files: [ 'app/src/js/**/*.js' ],
+                options: { livereload: true },
+                tasks: [ 'browserify', 'jshint:app' ]
             },
-            jsServer: {
+            server: {
                 files: '<%= jshint.server %>',
-                tasks: ['jshint:server'] 
-            },
-            handlebars: {
-                files: [
-                    'front/src/scripts/templates/helpers.js',
-                    'front/src/templates/**/*.hbs'
-                ],
-                tasks: [
-                    'handlebars:compile',
-                    'concat:handlebars'
-                ]
+                tasks: [ 'jshint:server' ] 
             },
             assets: {
                 files: [
-                    'front/src/assets/**',
-                    'front/src/styles/sprites/**'
+                    'app/src/assets/**',
+                    'app/src/scss/sprites/**'
                 ],
-                tasks: [
-                    'copy:assets'
-                ]
-            },
-            tests: {
-                files: '<%= jshint.tests %>',
-                tasks: ['jshint:tests']
+                tasks: [ 'copy:assets' ]
             }
         },
-        
-        nodemon: {
-            dev_local: {
-                script: 'bin/www',
-                options: {
-                    env: {
-                        NODE_ENV: 'local_development'
-                    },
-                    watch: 'back'
-                }
-            } 
-        },
 
-        jshint: {
-            options: {
-                bitwise: false,
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                boss: true,
-                eqnull: true,
-                browser: true,
-                expr: true,
-                es3: true,
-                globals: {
-                    // for node/browser compat
-                    "global": false,
-                    "module": false,
-                    "Buffer": false,
-                    "process": false,
-                    "Promise": true,
-                    "__dirname": false,
-                    "__env": false,
-                    "__base": false,
-                    // requirejs
-                    "define": false,
-                    "require": true,
-                    // handlebars, for helpers file
-                    "Handlebars": false,
-                    // mocha
-                    'mocha': false,
-                    "beforeEach": false,
-                    "describe": false,
-                    "xdescribe": false,
-                    "expect": false,
-                    "it": false,
-                    "xit": false,
-                    "jasmine": false,
-                    "runs": false,
-                    "spyOn": false,
-                    "waits": false,
-                    "waitsFor": false
-                }
-            },
-            front: [
-                'front/src/scripts/**/*.js',
-                '!front/src/scripts/vendor/**/*.js',
-                '!front/src/scripts/templates/**/*.js',
-                '!front/src/scripts/specs/**/*.js'
-            ],
-            server: [
-                'back/**/*.js',
-                'Gruntfile.js'
-            ],
-            tests: [
-                'front/src/scripts/specs/**/*.js'
-            ]
+        browserify: {
+            app: {
+                files: {
+                    'app/public/js/bundle.js' : ['app/src/js/**/*.js']
+                },
+                options: {
+                    transform: [
+                        'reactify',
+                        'envify'
+                    ]
+                }   
+            }
         },
 
         sass: {
@@ -134,143 +54,71 @@ module.exports = function(grunt) {
                 bundleExec: true
             },
             compile: {
-                files: {
-                    'front/src/styles/app.css': 'front/src/styles/main.scss'
-                }
-            }
-        },
-
-        handlebars: {
-            compile: {
-                options: {
-                    amd: true,
-                    namespace: false,
-                    partialRegex: /.*\.hbs/,
-                    partialsPathRegex: /\/partials\//,
-                    processPartialName: function (filePath) {
-                        var frags = filePath.split('/');
-                        var fileName = grunt.util._.last(frags);
-                        var fileFrag = fileName.split('.')[0];
-                        var partialFrag = frags.indexOf('partials');
-
-                        frags = grunt.util._.rest(frags, partialFrag + 1);
-                        frags.splice(frags.length - 1, 1, fileFrag);
-
-                        return frags.join('/');
-                    }
-                },
-                expand: true,
-                cwd: 'front/src/templates/',
-                src: '**/*.hbs',
-                dest: 'front/src/scripts/templates/',
-                ext: '.js'
-            }
-        },
-
-        concat: {
-            // options: {
-            //     banner: '<%= banner %>',
-            //     stripBanners: true
-            // },
-            handlebars: {
-                src: [
-                    'front/src/vendor/handlebars.js/handlebars.runtime.js',
-                    'front/src/scripts/templates/helpers.js'
-                ],
-                dest: 'front/public/scripts/handlebars.js'
-            },
-            js: {
-                src: [
-                    'front/public/packages/almond/almond.js',
-                    'dist/build/public/scripts/app.js'
-                ],
-                dest: 'dist/release/public/scripts/app.js'
+                files: { 'app/public/css/app.css': 'app/src/scss/main.scss' }
             }
         },
 
         copy: {
-            build: {
-                files: gruntConfig.buildFiles
-            },
             assets: {
-                files: gruntConfig.assetFiles
-            }
+                files: [
+                    {   
+                        expand: true,
+                        cwd: 'app/src/assets',
+                        src: ['**/*'],
+                        dest: 'app/public/assets/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/src/scss/sprites',
+                        src: ['**/*'],
+                        dest: 'app/public/css/'
+                    }
+                ]
+            } 
         },
-        
-        requirejs: {
-            compile: {
+
+        concurrent: {
+            start: {
+                tasks: ['nodemon:dev', 'watch'],
                 options: {
-                    name: 'main',
-                    baseUrl: './front/src/scripts/',
-                    mainConfigFile: './front/src/scripts/main.js',
-                    out: './front/public/scripts/app.js',
-                    optimize: 'none',
-                    include: ['vendor/require.js']
+                    logConcurrentOutput: true
                 }
             }
         },
-
-        mocha: {
-            test: {
+        
+        nodemon: {
+            dev: {
+                script: 'bin/www',
                 options: {
-                    log: true
-                },
-                src: ['front/src/test.html']
-            }             
+                    env: {
+                        NODE_ENV: 'local_development'
+                    },
+                    watch: 'server'
+                }
+            } 
+        },
+
+        jshint: {
+            options: gruntConfig.jshintOptions,
+            app: [ 'app/src/js/**/*.js' ],
+            server: [
+                'Gruntfile.js',
+                'server/**/*.js'
+            ] 
         }
     });
 
     grunt.util._.each([
         'contrib-watch',
-        'contrib-jshint',
         'contrib-sass',
-        'contrib-handlebars',
         'contrib-copy',
-        'contrib-concat',
-        'contrib-requirejs',
-        'mocha',
-        'nodemon'
+        'concurrent',
+        'browserify',
+        'nodemon',
+        'jsxhint'
     ], function(task) {
         grunt.loadNpmTasks('grunt-' + task);
     });
 
-    grunt.registerTask('templates', [
-        'handlebars:compile',
-        'concat:handlebars'
-    ]);
-
-    grunt.registerTask('release', [
-        'requirejs',
-        'copy:release'
-    ]);
-
-    grunt.registerTask('test', [
-        'mocha'
-    ]);
-
-    grunt.registerTask('start:local', [
-        'nodemon:dev_local'
-    ]);
+    grunt.registerTask('start', ['concurrent:start']);
 };
-
-
-// ************ GRUNT TASKS ************* //
-/* 
-
-
-grunt watch
-
-- monitors .hbs templates and compiles them
-- monitors .js app & server (jshint)
-- monitors .scss & compiles to .css in src
-- monitors assets & copys to public
-
-grunt copy:build 
-
-- copys minimum files from bower to src (run first time)
-
-grunt release
-
-- runs r.js to package js files and copys main.css to public
-*/
-
