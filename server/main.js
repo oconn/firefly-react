@@ -16,14 +16,14 @@ module.exports = new Promise(function(resolve, reject) {
         require('./config/passport')(passport, db.collection('users'));
         
         // Initialize Express 4 
-        var app = require('./express')(db, passport);
-        
+        var setup = require('./express')(db, passport);
+         
         // Start Routes
-        routes(app, db, passport);
+        routes(setup.app, setup.io, db, passport);
     
         log("Connected to MongoDB on port(s)\n" + database.servers);
 
-        resolve(app);
+        resolve(setup.app);
         return;
     });
 });
