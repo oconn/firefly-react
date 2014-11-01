@@ -35,33 +35,56 @@ function handleErrors() {
     this.emit('end');
 }
 
+function lint() {
+    gulp.src('app/src/js/**/*.js')
+    .pipe(react())
+    .pipe(jshint({
+        browser: true,
+        devel: false,
+        globalstrict: true,
+        es3: true,
+        globals: {
+            jest: true,
+            describe: true,
+            require: true,
+            module: true,
+            Promise: true
+        } 
+    }))
+    .pipe(jshint.reporter(stylish));
+}
+
 function bundleJS(watch) {
-    var file = './app/src/js/app.js';
     var bundler = browserify({
-        entries: file,
+        entries: './app/src/js/app.js',
         debug: true,
         transform: [reactify, envify],
         cache: {},
         packageCache: {},
-        fullPaths: true
+        fullPaths: true,
+        paths: [
+            './node_modules',
+            './app/src/js'
+        ]
     });
 
-    bundler = watch ? watchify(bundler) : bundler;
-    
+    bundler = watch ? watchify(bundler) : bundler; 
+     
     function rebundle() {
         var stream = bundler.bundle();
         return stream.on('error', handleErrors)
-        .pipe(source(file))
+        .pipe(source('app.js'))
         .pipe(gulp.dest('./app/public/js/'));
     }
 
     bundler.on('update', function() {
+        lint();
         var startTime = Date.now();
         gutil.log('Rebundling...');
         rebundle();
         gutil.log('Rebundled in ' + (Date.now() - startTime) + 'ms');
     });
-
+    
     return rebundle();
 }
 
@@ -102,6 +125,10 @@ gulp.task('nodemon', function() {
     }).on('change', ['lint-server']);
 });
 
+gulp.task('lint-app', function() {
+    return lint();
+});
+
 gulp.task('lint-server', function() {
     return gulp.src([
         'server/**/*.js', 
@@ -109,19 +136,12 @@ gulp.task('lint-server', function() {
     ])
     .pipe(jshint({
         expr: true,
-        sub: true
-    }))
-    .pipe(jshint.reporter(stylish));
-});
-
-gulp.task('lint-app', function() {
-    return gulp.src('app/src/js/**/*.js')
-    .pipe(react())
-    .pipe(jshint({
-        expr: true,
-        sub: true
-    }).on('warning', function(err) {
-        console.log(err);
+        node: true,
+        sub: true,
+        es3: true,
+        globals: {
+            Promise: true
+        }
     }))
     .pipe(jshint.reporter(stylish));
 });
@@ -162,21 +182,22 @@ gulp.task('test', function() {
 
 gulp.task('watch', function() {
     gulp.watch(paths.styles, ['css']);
-    gulp.watch(paths.scripts, ['lint-app', 'test']);
+    gulp.watch(paths.scripts, ['test']);
     gulp.watch(paths.assets, ['copy-assets']);
     gulp.watch(paths.sprites, ['copy-sprites']);
 });
 
 gulp.task('release', ['clean'], function(callback) {
     runSequence(
+        'lint-app',
         ['css', 'bundle-nowatch'],
         ['uglify', 'minify'],
         callback
     );
 });
 
-gulp.task('build', ['bundle-nowatch', 'css']);
+gulp.task('build', ['bundle-watch', 'css']);
 
 gulp.task('default', ['build'], function(callback) {
-    runSequence('watch', 'nodemon', callback);
+    runSequence('watch', 'nodemon', 'lint-app', callback);
 });

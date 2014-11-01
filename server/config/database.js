@@ -1,4 +1,4 @@
-var config = require('./master');
+var config = require('./master').database;
 
 var servers = config.dbServers,
     dbName = config.dbName,

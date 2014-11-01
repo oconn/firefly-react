@@ -4,13 +4,14 @@ var express = require('express'),
     path = require('path'),
     csurf = require('csurf'),
     session = require('express-session'),
-    cookieParser = require('cookie-parser');
+    cookieParser = require('cookie-parser'),
+    MongoStore = require('connect-mongo')(session);
     
 var staticPath = __env === 'production' ? 
-        __base + '/app/dist' : 
-        __base + '/app/public';
+        __base + '/front/public' : 
+        __base + '/front/src';
 
-module.exports = function() {
+module.exports = function(db, passport) {
     
     var app = express();
     
@@ -29,8 +30,15 @@ module.exports = function() {
     app.use(session({
         secret: process.env.SESSION_COOKIE_SECRET || 'session secret shh...',
         saveUninitialized: true,
-        resave: true
+        resave: true,
+        store: new MongoStore({
+            db: db,
+            collection: 'sessions'
+        })
     }));
+    
+    app.use(passport.initialize());
+    app.use(passport.session());
     
     return app;
 };
