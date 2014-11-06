@@ -1,0 +1,36 @@
+// Susy Globals
+$susy: (
+    columns: 12,
+    gutters: 1/4,
+);
+
+$total-col: 12;
+
+// Breakpoint Media Queries
+
+// Smartphones
+$phone: 320px 480px;
+$phone-land: 321px;
+$phone-port: max-width 320px;
+
+// Tablets (iPad specific)
+$tablet: 768px 1024px;
+$tablet-land: (768px 1024px) (orientation : landscape);
+$tablet-land: (768px 1024px) (orientation : portrait);
+
+// Mobile 
+$mobile: max-width 1024px;
+
+// Desktops and Laptops
+$laptop: 1024px;
+
+// Large screens
+$large-screen: 1824px;
+
+// Colors
+$c-link: #3586CE;
+$c-link-hover: #3079BA;
+$c-dark-green: #0D9673;
+$c-black: #0A0A0A;
+$c-light-gray: #D1D1D1;
+$c-off-white: #FAFAFA;

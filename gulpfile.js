@@ -36,8 +36,12 @@ function handleErrors() {
 }
 
 function lint() {
-    gulp.src('app/src/js/**/*.js')
-    .pipe(react())
+    gulp.src([
+        'app/src/js/**/*.js',
+        '!app/src/js/branches/**/*.js'
+    ])
+    .pipe(react()
+    .on('error', handleErrors))
     .pipe(jshint({
         browser: true,
         devel: false,
@@ -48,7 +52,8 @@ function lint() {
             describe: true,
             require: true,
             module: true,
-            Promise: true
+            Promise: true,
+            React: true
         } 
     }))
     .pipe(jshint.reporter(stylish));

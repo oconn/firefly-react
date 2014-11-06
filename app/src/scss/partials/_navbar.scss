@@ -1,0 +1,46 @@
+#navbar {
+    background-color: $c-off-white; 
+    border-bottom: 1px solid $c-light-gray;
+    nav {
+        #brand {
+            margin-left: 2.5%;
+            display: inline-block;
+            a {
+                color: $c-dark-green;
+                &:hover {
+                    cursor: pointer;
+                }
+                &:visited {
+                    text-decoration: none;
+                    color: $c-dark-green;
+                }
+            }
+        }
+    }
+
+    ul {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        position: absolute;
+        right: 0; 
+        top: 1em;
+        li {
+            font-family: Roboto;
+            font-weight: lighter;
+            display: inline-block;
+            padding: 0.5em 1em;
+            &:hover {
+                cursor: pointer;
+            }
+            a {
+                color: $c-dark-green;
+                text-decoration: none;
+                &:visited {
+                    text-decoration: none;
+                    color: $c-dark-green;
+                }
+            }
+        } 
+    }
+}
