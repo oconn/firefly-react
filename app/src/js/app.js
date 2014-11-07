@@ -17,6 +17,7 @@ var About = require('components/about/aboutIndex'),
     Login = require('components/sessions/loginIndex'),
     NewPost = require('components/admin/newPost'),
     Portfolio = require('components/portfolio/portfolioIndex'),
+    Post = require('components/blog/showPost'),
     Signup = require('components/sessions/signupIndex');
 
 var CurrentUserStore = require('stores/currentUserStore'),
@@ -25,7 +26,7 @@ var CurrentUserStore = require('stores/currentUserStore'),
 var BlogActions = require('actions/blogActions'),
     SessionActions = require('actions/sessionActions');
 
-var App = React.createClass({
+var App = React.createFactory( React.createClass({
     getInitialState: function() {
         return {
             user: null
@@ -107,14 +108,16 @@ var App = React.createClass({
             </div>
         );
     }
-});
+}));
 
-var routes = (
+React.render((
     <Routes location="history">
         <Route name="app" path="/" handler={App}>
             <Route name="portfolio" handler={Portfolio} />
             <Route name="about" handler={About} />
-            <Route name="blog" handler={Blog} />
+            <Route name="blog" handler={Blog}>
+                <Route name="showPost" path="*" handler={Post} />
+            </Route>
             <Route name="contact" handler={Contact} />
             <Route name="login" handler={Login} />
             <Route name="signup" handler={Signup} />
@@ -124,6 +127,5 @@ var routes = (
             <DefaultRoute handler={Home} />
         </Route>
     </Routes>
+    ), document.getElementById('app-wrapper')
 );
-
-React.render(routes, document.getElementById('app-wrapper'));

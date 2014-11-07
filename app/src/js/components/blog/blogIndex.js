@@ -8,7 +8,7 @@ var Blog = React.createClass({
     getInitialState: function() {
         return {
             posts: BlogStore.getAllPosts()
-        }
+        };
     },
 
     componentDidMount: function() {
@@ -22,13 +22,12 @@ var Blog = React.createClass({
     _onChange: function() {
         this.setState({posts: BlogStore.getAllPosts()});
     },
-    
-    render: function() {
 
+    render: function() {
         return (
             <ul>
                 {this.state.posts.map(function(post) {
-                    return <PostPreview post={post} />
+                    return <PostPreview post={post} key={post._id} />;
                 })}
             </ul>
         );
