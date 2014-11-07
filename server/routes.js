@@ -18,7 +18,8 @@ function isAdmin(req, res, next) {
 
 module.exports = function(app, io, db, passport) {
     var staticPagesController = require('./controllers/r/staticPagesController'),
-        usersController = require('./controllers/r/usersController')(db);
+        usersController = require('./controllers/r/usersController')(db),
+        postsController = require('./controllers/r/postsController')(db);
     
     // ************** TESTS ************** //
     // if (__env !== 'production') {
@@ -28,6 +29,17 @@ module.exports = function(app, io, db, passport) {
     // *********************************** //
     // *************** API *************** //
     // *********************************** //
+    
+    // ************* POSTS *************** //
+    app.get('/api/posts', postsController.getPosts);
+    app.get('/api/posts/slug', postsController.getPostBySlug);
+    app.get('/api/posts/:id', postsController.getPost);
+    app.post('/api/posts', isAdmin, postsController.createPost);
+    app.put('/api/posts/:id', isAdmin, postsController.updatePost);
+    app.del('/api/posts/:id', isAdmin, postsController.deletePost);
+    
+    
+    // ************* USERS *************** //
     app.get('/api/current_user', usersController.getCurrentUser);
     app.get('/api/users', [isAdmin], usersController.getUsers);
 

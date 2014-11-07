@@ -5,7 +5,9 @@ var keyMirror = require('react/lib/keyMirror');
 var AppConstants = {
 
     ActionTypes: keyMirror({
-        SESSION_UPDATE_CURRENT_USER: null
+        SESSION_UPDATE_CURRENT_USER: null,
+        SESSION_LOGOUT: null,
+        BLOG_FETCH_ALL_POSTS: null
     }),
 
     PayloadSources: keyMirror({
@@ -14,7 +16,8 @@ var AppConstants = {
     }),
 
     Routes: {
-        currentUser: '/api/current_user'
+        currentUser: '/api/current_user',
+        fetchAllPosts: '/api/posts'
     }
 };
 

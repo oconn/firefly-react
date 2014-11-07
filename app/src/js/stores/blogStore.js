@@ -7,9 +7,9 @@ var AppDispatcher = require('dispatcher/appDispatcher'),
     ActionTypes = AppConstants.ActionTypes,
     CHANGE_EVENT = 'change';
 
-var _currentUser = null;
+var _posts = [];
 
-var CurrentUserStore = assign({}, EventEmitter.prototype, {
+var BlogStore = assign({}, EventEmitter.prototype, {
     
     emitChange: function() {
         this.emit(CHANGE_EVENT);
@@ -23,24 +23,20 @@ var CurrentUserStore = assign({}, EventEmitter.prototype, {
         this.removeListener(CHANGE_EVENT, callback); 
     },
 
-    getCurrentUser: function() {
-        return _currentUser;
+    getAllPosts: function() {
+        return _posts;
     }
 });
 
-CurrentUserStore.dispatcherToken = AppDispatcher.register(function(payload) {
+BlogStore.dispatcherToken = AppDispatcher.register(function(payload) {
     var action = payload.action;
 
     switch(action.type) {
-        case ActionTypes.SESSION_UPDATE_CURRENT_USER:
-            _currentUser = action.user;
-            CurrentUserStore.emitChange();
-            break;
-        case ActionTypes.SESSION_LOGOUT:
-            _currentUser = null;
-            CurrentUserStore.emitChange();
+        case ActionTypes.BLOG_FETCH_ALL_POSTS:
+            _posts = action.posts;
+            BlogStore.emitChange();
             break;
     }
 });
 
-module.exports = CurrentUserStore;
+module.exports = BlogStore;
