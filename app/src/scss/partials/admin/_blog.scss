@@ -1,0 +1,12 @@
+.new-post-container {
+    @include container(100%);
+    #new-post-form {
+        @include span(6 of 12);
+    }
+    
+    #new-post-preview {
+        @include span(6 of 12 last);
+    }
+}
+
+
