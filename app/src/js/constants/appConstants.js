@@ -5,12 +5,13 @@ var keyMirror = require('react/lib/keyMirror');
 var AppConstants = {
 
     ActionTypes: keyMirror({
+        BLOG_FETCH_ALL_POSTS: null,
+        BLOG_ADD_NEW_POST: null,
+        BLOG_UPDATE_POST: null,
         SESSION_UPDATE_CURRENT_USER: null,
         SESSION_LOGOUT: null,
         SESSION_REDIRECT: null,
-        BLOG_FETCH_ALL_POSTS: null,
-        BLOG_ADD_NEW_POST: null,
-        BLOG_UPDATE_POST: null
+        TAGS_FETCH_ALL_TAGS: null
     }),
 
     PayloadSources: keyMirror({
@@ -21,11 +22,8 @@ var AppConstants = {
     Routes: {
         currentUser: '/api/current_user',
         logout: '/logout',
-        fetchAllPosts: '/api/posts',
-        
-        admin: {
-            apiPosts: '/api/posts'
-        }
+        posts: '/api/posts',
+        tags: '/api/tags'
     }
 };
 

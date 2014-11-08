@@ -6,20 +6,20 @@ var AppDispatcher = require('dispatcher/appDispatcher'),
     Routes = AppConstants.Routes,
     reqwest = require('reqwest');
 
-var BlogActions = {
+var TagActions = {
     
-    fetchPosts: function() {
+    fetchTags: function() {
         reqwest({
-            url: Routes.posts,
+            url: Routes.tags,
             type: 'json'
         })
         .then(function(res) {
             AppDispatcher.handleServerAction({
-                type: ActionTypes.BLOG_FETCH_ALL_POSTS,
+                type: ActionTypes.TAGS_FETCH_ALL_TAGS,
                 posts: res
             }); 
         }); 
     }
 };
 
-module.exports = BlogActions;
+module.exports = TagActions;

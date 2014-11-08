@@ -25,7 +25,7 @@ var TagStore = assign({}, EventEmitter.prototype, {
     },
 
     getAllTags: function() {
-        return _posts;
+        return _tags;
     }
 });
 

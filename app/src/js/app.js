@@ -28,7 +28,8 @@ var BlogStore = require('stores/blogStore'),
     TagStore = require('stores/tagStore');
 
 var BlogActions = require('actions/blogActions'),
-    SessionActions = require('actions/sessionActions');
+    SessionActions = require('actions/sessionActions'),
+    TagActions = require('actions/tagActions');
 
 var App = React.createFactory( React.createClass({
 
@@ -44,6 +45,7 @@ var App = React.createFactory( React.createClass({
         SessionStore.addChangeListener(this._onChange);
         SessionActions.fetchCurrentUser();
         BlogActions.fetchPosts();
+        TagActions.fetchTags();
     },
 
     componentWillUnmount: function() {

@@ -18,11 +18,10 @@ var AdminActions = function() {
     return  {
         submitPost: function(post) {
             reqwest({
-                url: Routes.admin.apiPosts,
+                url: Routes.posts,
                 method: 'POST',
                 data: post
             }).then(function(res) {
-                console.log(res);
                 AppDispatcher.handleServerAction({
                     type: ActionTypes.BLOG_ADD_NEW_POST,
                     post: res
@@ -34,7 +33,7 @@ var AdminActions = function() {
 
         updatePost: function(post) {
             reqwest({
-                url: Routes.admin.apiPosts + '/' + post._id,
+                url: Routes.posts + '/' + post._id,
                 method: 'PUT',
                 data: post
             }).then(function(res) {
@@ -49,7 +48,7 @@ var AdminActions = function() {
 
         removePost: function(id) {
             reqwest({
-                url: Routes.admin.apiPosts + '/' + id,
+                url: Routes.posts + '/' + id,
                 method: 'DELETE'
             }).then(function(res) {
                 AppDispatcher.handleServerAction({
