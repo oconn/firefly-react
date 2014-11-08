@@ -61,7 +61,8 @@ module.exports = function(app, io, db, passport) {
 
     app.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.status(200).send('Success');
+        //res.redirect('/');
     });    
     // *********************************** //
     // ********* STATIC PAGES *********** //

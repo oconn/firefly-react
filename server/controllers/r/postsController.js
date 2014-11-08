@@ -57,7 +57,7 @@ module.exports = function(db) {
             if (err) {
                 switch(err.code) {
                     case 11000:
-                        res.status(409).json({error: "Title: '" + post.title + "' has already been used"});
+                        res.status(409).send("Title: '" + post.title + "' has already been used");
                         break;
                     default:
                         res.status(500).json({error: err});
@@ -71,12 +71,19 @@ module.exports = function(db) {
     };
     
     c.updatePost = function(req, res) {
+        var post = new Post(req.body);
         postsCollection.update(
             {'_id': new ObjectID(req.params.id)},
-            new Post(req.body), 
-            function(err, post) {
+            post, 
+            function(err, write) {
                 if (err) {
-                    res.status(400).json({error: err});
+                    switch(err.code) {
+                        case 11000:
+                            res.status(409).send("Title: '" + post.title + "' has already been used");
+                            break;
+                        default:
+                            res.status(500).json({error: err});
+                    }
                     return;
                 }
 

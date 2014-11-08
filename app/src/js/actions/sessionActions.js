@@ -38,8 +38,25 @@ var SessionActions = {
         if (window.localStorage) {
             window.localStorage.removeItem('user');
         }
-        AppDispatcher.handleServerAction({
-            type: ActionTypes.SESSION_LOGOUT
+        
+        reqwest({
+            url: Routes.logout,
+            method: 'GET'
+        }).then(function(res) {
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.SESSION_LOGOUT
+            });
+            AppDispatcher.handleViewAction({
+                type: ActionTypes.SESSION_REDIRECT,
+                path: '/'
+            });
+        });
+    },
+
+    redirect: function(path) {
+        AppDispatcher.handleViewAction({
+            type: ActionTypes.SESSION_REDIRECT,
+            path: path
         });
     }
 };

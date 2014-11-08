@@ -7,7 +7,10 @@ var AppConstants = {
     ActionTypes: keyMirror({
         SESSION_UPDATE_CURRENT_USER: null,
         SESSION_LOGOUT: null,
-        BLOG_FETCH_ALL_POSTS: null
+        SESSION_REDIRECT: null,
+        BLOG_FETCH_ALL_POSTS: null,
+        BLOG_ADD_NEW_POST: null,
+        BLOG_UPDATE_POST: null
     }),
 
     PayloadSources: keyMirror({
@@ -17,10 +20,11 @@ var AppConstants = {
 
     Routes: {
         currentUser: '/api/current_user',
+        logout: '/logout',
         fetchAllPosts: '/api/posts',
         
         admin: {
-            submitPost: '/api/posts'
+            apiPosts: '/api/posts'
         }
     }
 };

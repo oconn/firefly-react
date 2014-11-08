@@ -13,20 +13,27 @@ var About = require('components/about/aboutIndex'),
     Admin = require('components/admin/adminIndex'),
     Blog = require('components/blog/blogIndex'),
     Contact = require('components/contact/contactIndex'),
+    EditPost = require('components/admin/blog/editPost'),
     Home = require('components/home/homeIndex'),
     Login = require('components/sessions/loginIndex'),
-    NewPost = require('components/admin/newPost'),
+    ManagePosts = require('components/admin/blog/managePosts'),
+    ManageTags = require('components/admin/tags/manageTags'),
+    NewPost = require('components/admin/blog/newPost'),
     Portfolio = require('components/portfolio/portfolioIndex'),
     Post = require('components/blog/showPost'),
     Signup = require('components/sessions/signupIndex');
 
-var CurrentUserStore = require('stores/currentUserStore'),
-    BlogStore = require('stores/blogStore');
+var BlogStore = require('stores/blogStore'),
+    SessionStore = require('stores/sessionStore'),
+    TagStore = require('stores/tagStore');
 
 var BlogActions = require('actions/blogActions'),
     SessionActions = require('actions/sessionActions');
 
 var App = React.createFactory( React.createClass({
+
+    mixins: [ Router.Navigation ],
+
     getInitialState: function() {
         return {
             user: null
@@ -34,17 +41,21 @@ var App = React.createFactory( React.createClass({
     },
 
     componentDidMount: function() {
-        CurrentUserStore.addChangeListener(this._onChange);
+        SessionStore.addChangeListener(this._onChange);
         SessionActions.fetchCurrentUser();
         BlogActions.fetchPosts();
     },
 
     componentWillUnmount: function() {
-        CurrentUserStore.removeChangeListener(this._onChange);
+        SessionStore.removeChangeListener(this._onChange);
     },
     
     _onChange: function() {
-        this.setState({user: CurrentUserStore.getCurrentUser()});
+        this.setState({user: SessionStore.getCurrentUser()});
+        
+        if (SessionStore.getRedirect()) {
+            this.transitionTo(SessionStore.getRedirect());
+        }
     },
 
     logout: function() {
@@ -123,6 +134,9 @@ React.render((
             <Route name="signup" handler={Signup} />
             <Route name="admin" handler={Admin}>
                 <Route name="new_post" handler={NewPost} />
+                <Route name="manage_posts" handler={ManagePosts} />
+                <Route name="manage_tags" handler={ManageTags} />
+                <Route name="edit_post" path="admin/edit_post/:id" handler={EditPost}/>
             </Route> 
             <DefaultRoute handler={Home} />
         </Route>

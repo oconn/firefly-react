@@ -4,12 +4,12 @@ var AppDispatcher = require('dispatcher/appDispatcher'),
     AppConstants = require('constants/appConstants'),
     ActionTypes = AppConstants.ActionTypes,
     Routes = AppConstants.Routes,
-    CurrentUserStore = require('stores/currentUserStore'),
+    SessionStore = require('stores/sessionStore'),
     reqwest = require('reqwest');
 
 var AdminActions = function() {
     
-    var currentUser = CurrentUserStore.getCurrentUser();
+    var currentUser = SessionStore.getCurrentUser();
     if (!currentUser || !currentUser.admin) {
         // TODO Handle AUTH err
         return {};
@@ -18,13 +18,46 @@ var AdminActions = function() {
     return  {
         submitPost: function(post) {
             reqwest({
-                url: Routes.admin.submitPost,
+                url: Routes.admin.apiPosts,
                 method: 'POST',
-                data: post, 
+                data: post
             }).then(function(res) {
-                console.log(res); 
-            }).fail(function(err, msg) {
-                 
+                console.log(res);
+                AppDispatcher.handleServerAction({
+                    type: ActionTypes.BLOG_ADD_NEW_POST,
+                    post: res
+                });
+            }).fail(function(err) {
+                // TODO
+            });
+        },
+
+        updatePost: function(post) {
+            reqwest({
+                url: Routes.admin.apiPosts + '/' + post._id,
+                method: 'PUT',
+                data: post
+            }).then(function(res) {
+                AppDispatcher.handleServerAction({
+                   type: ActionTypes.BLOG_UPDATE_POST,
+                   post: res 
+                });
+            }).fail(function(err) {
+                // TODO 
+            });
+        },
+
+        removePost: function(id) {
+            reqwest({
+                url: Routes.admin.apiPosts + '/' + id,
+                method: 'DELETE'
+            }).then(function(res) {
+                AppDispatcher.handleServerAction({
+                    type: ActionTypes.BLOG_REMOVE_POST,
+                    id: id
+                });
+            }).fail(function(err) {
+                // TODO
             });
         }
     };
