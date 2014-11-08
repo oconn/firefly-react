@@ -55,7 +55,13 @@ module.exports = function(db) {
         var post = new Post(req.body);
         postsCollection.insert(post, function(err, write) {
             if (err) {
-                res.status(500).json({error: err});
+                switch(err.code) {
+                    case 11000:
+                        res.status(409).json({error: "Title: '" + post.title + "' has already been used"});
+                        break;
+                    default:
+                        res.status(500).json({error: err});
+                }
                 return;
             } 
 

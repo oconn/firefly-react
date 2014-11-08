@@ -1,6 +1,8 @@
 'use strict';
 
 var marked = require('marked');
+var Alert = require('branches/components/alert');
+var AdminActions = require('actions/adminActions');
 
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -32,12 +34,24 @@ var NewPost = React.createClass({
         return marked(this.state.body);     
     },
 
+    onSubmit: function(e) {
+        e.preventDefault();
+        
+        AdminActions().submitPost({
+            title: this.state.title,
+            body: this.state.body
+        });
+    },
+
+    submitPost: function() {
+        
+    },
+
     render: function() {
         var title = this.state.title,
             body= this.state.body,
             parsedBody = this.parseBody();
 
-        console.log(title);
         return (
             <div className="new-post-container">
                 <form id="new-post-form" onSubmit={this.onSubmit} >
@@ -48,7 +62,11 @@ var NewPost = React.createClass({
 
                     <fieldset>
                         <label>Body</label>
-                        <textarea name="body" value={body} onChange={this.updateField} />
+                        <textarea name='body' value={body} onChange={this.updateField} />
+                    </fieldset>
+                    
+                    <fieldset>
+                        <input type='submit' value='post' /> 
                     </fieldset>
                 </form>   
                 <div id="new-post-preview">

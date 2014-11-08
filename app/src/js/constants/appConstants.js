@@ -17,7 +17,11 @@ var AppConstants = {
 
     Routes: {
         currentUser: '/api/current_user',
-        fetchAllPosts: '/api/posts'
+        fetchAllPosts: '/api/posts',
+        
+        admin: {
+            submitPost: '/api/posts'
+        }
     }
 };
 
