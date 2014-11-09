@@ -3,7 +3,8 @@ var Tag = require('../../models/tag'),
 
 module.exports = function(db) {
     var c = {},
-        tagsCollection = db.collection('tags');
+        tagsCollection = db.collection('tags'),
+        postsController = require('./postsController')(db);
 
     tagsCollection.ensureIndex(
         {name: 1},
@@ -53,7 +54,8 @@ module.exports = function(db) {
                 res.status(400).json({error: err});
                 return;
             }
-
+            
+            postsController.removeTagFromPosts(req.params.id);
             res.json({success: 'Tag Removed'});
             return;
         });

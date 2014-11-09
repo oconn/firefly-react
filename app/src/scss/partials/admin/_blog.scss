@@ -9,4 +9,58 @@
     }
 }
 
+.manage-posts {
+    .admin-post-list {
+        li {
+            list-style: none;
+            > * {
+                margin: 0 auto;
+                display: inline-table;
+            }
+            .title {
+                @include span(5 of 12);
+            }
+            .date {
+                @include span(3 of 12)
+            }
+            .count {
+                @include span(2 of 12);
+            }
+            .edit {
+                @include span(1 of 12);
+            }
+            .delete {
+                @include span(1 of 12 last); 
+                &:hover {
+                    cursor: pointer;
+                }
+            }
 
+            @include breakpoint($mobile) {
+                .title,
+                .date {
+                    margin: 0.5em auto;
+                    @include span(12 of 12);
+                }
+                .count,
+                .edit {
+                    @include span(4 of 12);
+                }
+                .delete {
+                    @include span(4 of 12 last);
+                }
+            }
+        
+            @include breakpoint($phone) {
+                .title,
+                .date,
+                .count,
+                .edit,
+                .delete {
+                    margin: 0.5em auto;
+                    @include span(12 of 12);
+                }
+            }
+        }
+    }
+}

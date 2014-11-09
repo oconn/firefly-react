@@ -32,6 +32,12 @@ var BlogStore = assign({}, EventEmitter.prototype, {
         return _.filter(_posts, function(post) {
             return post._id === id;
         })[0];
+    },
+
+    getPostBySlug: function(slug) {
+        return _.filter(_posts, function(post) {
+            return post.slug === slug;
+        })[0];
     }
 });
 

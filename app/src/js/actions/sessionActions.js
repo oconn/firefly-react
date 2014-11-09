@@ -4,34 +4,42 @@ var AppDispatcher = require('dispatcher/appDispatcher'),
     AppConstants = require('constants/appConstants'),
     ActionTypes = AppConstants.ActionTypes,
     Routes = AppConstants.Routes,
-    reqwest = require('reqwest');
+    reqwest = require('reqwest'),
+    Promise = require('es6-promise').Promise;
 
 var SessionActions = {
     
     fetchCurrentUser: function() {
-        if (window.localStorage && window.localStorage.getItem('user')) {
-            AppDispatcher.handleServerAction({
-                type: ActionTypes.SESSION_UPDATE_CURRENT_USER,
-                user: JSON.parse(window.localStorage.getItem('user'))
-            });
-        } else {
-            reqwest({
-                url: Routes.currentUser,
-                type: 'json'
-            })
-            .then(function(res) {
-                if (!_.isEmpty(res)) {
-                    if (window.localStorage) {
-                        window.localStorage.setItem('user', JSON.stringify(res));
+        return new Promise(function(resolve, reject) {
+            if (window.localStorage && window.localStorage.getItem('user')) {
+                AppDispatcher.handleServerAction({
+                    type: ActionTypes.SESSION_UPDATE_CURRENT_USER,
+                    user: JSON.parse(window.localStorage.getItem('user'))
+                });
+                resolve();
+            } else {
+                reqwest({
+                    url: Routes.currentUser,
+                    type: 'json'
+                }).then(function(res) {
+                    if (!_.isEmpty(res)) {
+                        if (window.localStorage) {
+                            window.localStorage.setItem('user', JSON.stringify(res));
+                        }
+                        AppDispatcher.handleServerAction({
+                            type: ActionTypes.SESSION_UPDATE_CURRENT_USER,
+                            user: res
+                        });
+                        resolve();
+                    } else {
+                        resolve();
                     }
-
-                    AppDispatcher.handleServerAction({
-                        type: ActionTypes.SESSION_UPDATE_CURRENT_USER,
-                        user: res
-                    });
-                }
-            });
-        }
+                }).fail(function(err) {
+                    // TODO
+                    reject();
+                })
+            }
+        });
     },
 
     logout: function() {

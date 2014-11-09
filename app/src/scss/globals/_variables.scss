@@ -16,7 +16,7 @@ $phone-port: max-width 320px;
 // Tablets (iPad specific)
 $tablet: 768px 1024px;
 $tablet-land: (768px 1024px) (orientation : landscape);
-$tablet-land: (768px 1024px) (orientation : portrait);
+$tablet-port: (768px 1024px) (orientation : portrait);
 
 // Mobile 
 $mobile: max-width 1024px;

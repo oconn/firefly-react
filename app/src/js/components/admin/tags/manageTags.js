@@ -27,7 +27,10 @@ var ManageTags = React.createClass({
     
     addTag: function(e) {
         e.preventDefault();
-        adminActions().addTag(this.state.value);
+        if (this.state.value !== '') {
+            adminActions().addTag(this.state.value);
+            this.setState({value: ''});
+        }
     },
 
     updateName: function(e) {
@@ -40,9 +43,9 @@ var ManageTags = React.createClass({
 
     render: function() {
         var value = this.state.value;
-        var tags = _.map(this.state.tags, function(tag) {
+        var tags = _.map(this.state.tags, function(tag, index) {
             return (
-                <li>
+                <li key={index}>
                     <p>{tag.name}</p>
                     <p id={tag._id} onClick={this.removeTag}>Delete</p>
                 </li>    

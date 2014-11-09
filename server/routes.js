@@ -38,7 +38,7 @@ module.exports = function(app, io, db, passport) {
     app.post('/api/posts', isAdmin, postsController.createPost);
     app.put('/api/posts/:id', isAdmin, postsController.updatePost);
     app.del('/api/posts/:id', isAdmin, postsController.deletePost);
-    
+    app.put('/api/posts/:id/view', postsController.updateViewCount);
     
     // ************* TAGS **************** //
     app.get('/api/tags', tagsController.getTags);

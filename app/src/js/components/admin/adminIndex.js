@@ -12,6 +12,7 @@ var Admin = React.createClass({
                     <li><Link to="new_post">New Post</Link></li>
                     <li><Link to="manage_posts">Manage Posts</Link></li>
                     <li><Link to="manage_tags">Manage Tags</Link></li>
+                    <li><Link to="manage_users">Manage Users</Link></li>
                 </ul>
                 {this.props.activeRouteHandler()}
             </div> 

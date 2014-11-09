@@ -22,7 +22,8 @@ var NewPost = React.createClass({
         return {
             title: '',
             body: '',
-            tags: []
+            tags: TagStore.getAllTags(),
+            selectedTags: {}
         }; 
     },
     
@@ -50,18 +51,35 @@ var NewPost = React.createClass({
 
     onSubmit: function(e) {
         e.preventDefault();
-        
         this.submitPost(); 
+    },
+
+    getSelectedTags: function() {
+        var tags = [];
+        for (var tag in this.state.selectedTags) {
+            tags.push(tag);
+        }
+        return tags;
     },
 
     submitPost: function() {
         var post = {
             title: this.state.title,
             body_raw: this.state.body,
-            body: this.parseBody()
+            body: this.parseBody(),
+            tags: this.getSelectedTags()
         };
-
         adminActions().submitPost(post);
+    },
+
+    tagChecked: function(e) {
+        var selectedTags = this.state.selectedTags;
+        if (e.target.checked) {
+            selectedTags[e.target.value] = e.target.name;
+        } else {
+            delete selectedTags[e.target.value];
+        }
+        this.setState({selectedTags: selectedTags});
     },
 
     render: function() {
@@ -69,9 +87,13 @@ var NewPost = React.createClass({
             body= this.state.body,
             parsedBody = this.parseBody(),
             tags = _.map(this.state.tags, function(tag) {
-                console.log(tag);
-                return tag.name;
-            });
+                return (
+                    <div>
+                        <p>{tag.name}</p>
+                        <input type="checkbox" value={tag._id} name={tag.name} onChange={this.tagChecked} /> 
+                    </div>       
+                );
+            }.bind(this));
         
         return (
             <div className="new-post-container">

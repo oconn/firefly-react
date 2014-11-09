@@ -6,18 +6,26 @@ module.exports = function(db) {
         postsCollection = db.collection('posts');
     
     postsCollection.ensureIndex(
-        {title: 1},
+        {
+            title: 1,
+            slug: 1
+        },
         {
             unique: true,
             dropDups: true
         },
         function(err, results) {
-        
+             
         }
     );
     
-    c.getPosts = function(req, res) {           
-        postsCollection.find().toArray(function(err, posts) {
+    c.getPosts = function(req, res) {
+        var hideFields = (req.user && req.user.admin) ? {} : {
+            total_views: 0,
+            unique_views: 0
+        };
+
+        postsCollection.find({}, hideFields).toArray(function(err, posts) {
             if (err) {
                 res.status(400).json({error: err});
                 return;
@@ -25,7 +33,7 @@ module.exports = function(db) {
 
             res.json(posts);
             return;
-        });    
+        });
     };
     
     c.getPost = function(req, res) {
@@ -104,6 +112,39 @@ module.exports = function(db) {
             res.json({success: 'Post Removed'});
             return;
         });
+    };
+
+    c.removeTagFromPosts = function(tagId) {
+        postsCollection.update(
+            {},
+            {$pull: {tags: tagId}},
+            {   
+                w: -1,
+                multi: true
+            },
+            function(err, write) {
+                // TODO 
+            }
+        );
+    };
+
+    c.updateViewCount = function(req, res) {
+        postsCollection.update(
+            {'_id': new ObjectID(req.params.id)},
+            {$inc: {total_views: 1}},
+            {
+                w: -1,
+                multi: false
+            }, function(err, write) {
+                if (err) {
+                    res.status(500).json({error: err});
+                    return;
+                }
+                
+                res.status(200).send("Success");
+                return;
+            }
+        );
     };
 
     return c;

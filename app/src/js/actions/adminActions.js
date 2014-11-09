@@ -72,7 +72,7 @@ var AdminActions = function() {
                 });
             }).fail(function(err) {
                 // TODO
-            })
+            });
         },
 
         removeTag: function(id) {

@@ -7,8 +7,20 @@ var Router = require('react-router'),
     Routes = Router.Routes,
     NotFoundRoute = Router.NotFoundRoute,
     DefaultRoute = Router.DefaultRoute,
-    Link = Router.Link;
+    Link = Router.Link,
+    Promise = require('es6-promise').Promise;
 
+// Stores
+var BlogStore = require('stores/blogStore'),
+    SessionStore = require('stores/sessionStore'),
+    TagStore = require('stores/tagStore');
+
+// Actions
+var BlogActions = require('actions/blogActions'),
+    SessionActions = require('actions/sessionActions'),
+    TagActions = require('actions/tagActions');
+
+// View
 var About = require('components/about/aboutIndex'),
     Admin = require('components/admin/adminIndex'),
     Blog = require('components/blog/blogIndex'),
@@ -18,18 +30,11 @@ var About = require('components/about/aboutIndex'),
     Login = require('components/sessions/loginIndex'),
     ManagePosts = require('components/admin/blog/managePosts'),
     ManageTags = require('components/admin/tags/manageTags'),
+    ManageUsers = require('components/admin/users/manageUsers'),
     NewPost = require('components/admin/blog/newPost'),
     Portfolio = require('components/portfolio/portfolioIndex'),
     Post = require('components/blog/showPost'),
     Signup = require('components/sessions/signupIndex');
-
-var BlogStore = require('stores/blogStore'),
-    SessionStore = require('stores/sessionStore'),
-    TagStore = require('stores/tagStore');
-
-var BlogActions = require('actions/blogActions'),
-    SessionActions = require('actions/sessionActions'),
-    TagActions = require('actions/tagActions');
 
 var App = React.createFactory( React.createClass({
 
@@ -37,15 +42,23 @@ var App = React.createFactory( React.createClass({
 
     getInitialState: function() {
         return {
-            user: null
+            user: null,
+            allAssetsLoaded: false
         };
     },
 
     componentDidMount: function() {
         SessionStore.addChangeListener(this._onChange);
-        SessionActions.fetchCurrentUser();
-        BlogActions.fetchPosts();
-        TagActions.fetchTags();
+        
+        Promise.all([
+            SessionActions.fetchCurrentUser(),
+            BlogActions.fetchPosts(),
+            TagActions.fetchTags()
+        ]).then(function(value) {
+            this.setState({allAssetsLoaded: true}); 
+        }.bind(this)).then(undefined, function(err) {
+            // TODO
+        });
     },
 
     componentWillUnmount: function() {
@@ -107,6 +120,9 @@ var App = React.createFactory( React.createClass({
                 this._adminLinks() : this._userLinks() :
             this._guestLinks();
 
+        var activeRouteHandler = this.state.allAssetsLoaded ? 
+            this.props.activeRouteHandler() : '';
+
         return (
             <div>
               <header id="navbar">
@@ -116,7 +132,7 @@ var App = React.createFactory( React.createClass({
                 </nav>
               </header>
               <div id="main">
-                {this.props.activeRouteHandler()}
+                {activeRouteHandler}
               </div>
             </div>
         );
@@ -128,9 +144,8 @@ React.render((
         <Route name="app" path="/" handler={App}>
             <Route name="portfolio" handler={Portfolio} />
             <Route name="about" handler={About} />
-            <Route name="blog" handler={Blog}>
-                <Route name="showPost" path="*" handler={Post} />
-            </Route>
+            <Route name="blog" handler={Blog} />
+            <Route name="showPost" path="/blog/*" handler={Post} />
             <Route name="contact" handler={Contact} />
             <Route name="login" handler={Login} />
             <Route name="signup" handler={Signup} />
@@ -138,6 +153,7 @@ React.render((
                 <Route name="new_post" handler={NewPost} />
                 <Route name="manage_posts" handler={ManagePosts} />
                 <Route name="manage_tags" handler={ManageTags} />
+                <Route name="manage_users" nandler={ManageUsers} />
                 <Route name="edit_post" path="admin/edit_post/:id" handler={EditPost}/>
             </Route> 
             <DefaultRoute handler={Home} />
