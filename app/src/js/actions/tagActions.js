@@ -16,7 +16,7 @@ var TagActions = {
         .then(function(res) {
             AppDispatcher.handleServerAction({
                 type: ActionTypes.TAGS_FETCH_ALL_TAGS,
-                posts: res
+                tags: res
             }); 
         }); 
     }

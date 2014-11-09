@@ -2,6 +2,8 @@
 
 var marked = require('marked');
 var adminActions = require('actions/adminActions');
+var TagStore = require('stores/tagStore');
+var _ = require('lodash');
 
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -19,9 +21,22 @@ var NewPost = React.createClass({
     getInitialState: function() {
         return {
             title: '',
-            body: ''
+            body: '',
+            tags: []
         }; 
-    },  
+    },
+    
+    componentDidMount: function() {
+        TagStore.addChangeListener(this._onChange); 
+    },
+    
+    componentWillUnmount: function() {
+        TagStore.removeChangeListener(this._onChange);
+    },
+
+    _onChange: function() {
+        this.setState({tags: TagStore.getAllTags()});
+    }, 
     
     updateField: function(e) {
         var state = this.state;
@@ -52,8 +67,12 @@ var NewPost = React.createClass({
     render: function() {
         var title = this.state.title,
             body= this.state.body,
-            parsedBody = this.parseBody();
-
+            parsedBody = this.parseBody(),
+            tags = _.map(this.state.tags, function(tag) {
+                console.log(tag);
+                return tag.name;
+            });
+        
         return (
             <div className="new-post-container">
                 <form id="new-post-form" onSubmit={this.onSubmit} >
@@ -65,6 +84,11 @@ var NewPost = React.createClass({
                     <fieldset>
                         <label>Body</label>
                         <textarea name='body' value={body} onChange={this.updateField} />
+                    </fieldset>
+
+                    <fieldset>
+                        <label>Tags</label>
+                        {tags}
                     </fieldset>
                     
                     <fieldset>

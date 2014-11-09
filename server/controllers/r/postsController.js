@@ -4,16 +4,17 @@ var Post = require('../../models/post'),
 module.exports = function(db) {
     var c = {},
         postsCollection = db.collection('posts');
-        postsCollection.ensureIndex(
-            {title: 1},
-            {
-                unique: true,
-                dropDups: true
-            },
-            function(err, results) {
-            
-            }
-        );
+    
+    postsCollection.ensureIndex(
+        {title: 1},
+        {
+            unique: true,
+            dropDups: true
+        },
+        function(err, results) {
+        
+        }
+    );
     
     c.getPosts = function(req, res) {           
         postsCollection.find().toArray(function(err, posts) {

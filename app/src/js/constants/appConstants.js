@@ -11,7 +11,9 @@ var AppConstants = {
         SESSION_UPDATE_CURRENT_USER: null,
         SESSION_LOGOUT: null,
         SESSION_REDIRECT: null,
-        TAGS_FETCH_ALL_TAGS: null
+        TAGS_FETCH_ALL_TAGS: null,
+        TAGS_ADD_TAG: null,
+        TAGS_REMOVE_TAG: null
     }),
 
     PayloadSources: keyMirror({

@@ -58,6 +58,35 @@ var AdminActions = function() {
             }).fail(function(err) {
                 // TODO
             });
+        },
+
+        addTag: function(name) {
+            reqwest({
+                url: Routes.tags,
+                method: 'POST',
+                data: {name: name}
+            }).then(function(res) {
+                AppDispatcher.handleServerAction({
+                    type: ActionTypes.TAGS_ADD_TAG,
+                    tag: res 
+                });
+            }).fail(function(err) {
+                // TODO
+            })
+        },
+
+        removeTag: function(id) {
+            reqwest({
+                url: Routes.tags + '/' + id,
+                method: 'DELETE'
+            }).then(function(res) {
+                AppDispatcher.handleServerAction({
+                    type: ActionTypes.TAGS_REMOVE_TAG,
+                    id: id
+                }); 
+            }).fail(function(err) {
+                // TODO
+            });
         }
     };
         

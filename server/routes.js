@@ -19,7 +19,8 @@ function isAdmin(req, res, next) {
 module.exports = function(app, io, db, passport) {
     var staticPagesController = require('./controllers/r/staticPagesController'),
         usersController = require('./controllers/r/usersController')(db),
-        postsController = require('./controllers/r/postsController')(db);
+        postsController = require('./controllers/r/postsController')(db),
+        tagsController = require('./controllers/r/tagsController')(db);
     
     // ************** TESTS ************** //
     // if (__env !== 'production') {
@@ -39,6 +40,11 @@ module.exports = function(app, io, db, passport) {
     app.del('/api/posts/:id', isAdmin, postsController.deletePost);
     
     
+    // ************* TAGS **************** //
+    app.get('/api/tags', tagsController.getTags);
+    app.post('/api/tags', isAdmin, tagsController.createTag);
+    app.del('/api/tags/:id', isAdmin, tagsController.deleteTag);
+
     // ************* USERS *************** //
     app.get('/api/current_user', usersController.getCurrentUser);
     app.get('/api/users', [isAdmin], usersController.getUsers);

@@ -33,10 +33,20 @@ TagStore.dispatcherToken = AppDispatcher.register(function(payload) {
     var action = payload.action;
 
     switch(action.type) {
-        case ActionTypes.BLOG_FETCH_ALL_TAGS:
-
+        case ActionTypes.TAGS_FETCH_ALL_TAGS:
+            _tags = action.tags;
+            TagStore.emitChange();
             break;
-            
+        case ActionTypes.TAGS_ADD_TAG:
+            _tags.push(action.tag);
+            TagStore.emitChange();
+            break;
+        case ActionTypes.TAGS_REMOVE_TAG:
+            _tags = _.reject(_tags, function(tag) {
+                return tag._id === action.id;
+            });
+            TagStore.emitChange();
+            break;
     }
 });
 
