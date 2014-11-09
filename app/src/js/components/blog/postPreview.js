@@ -8,7 +8,7 @@ var PostPreview = React.createClass({
     getInitialState: function() {
         return {
             description: this.getDescription()
-        }
+        };
     },
     
     getDescription: function() {

@@ -37,7 +37,7 @@ var SessionActions = {
                 }).fail(function(err) {
                     // TODO
                     reject();
-                })
+                });
             }
         });
     },

@@ -28,7 +28,6 @@ var BlogActions = {
     },
 
     incrementViewCount: function(id) {
-        console.log(id);
         reqwest({
             url: Routes.posts + '/' + id + '/view',
             method: 'PUT'

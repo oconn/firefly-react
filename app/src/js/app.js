@@ -153,7 +153,7 @@ React.render((
                 <Route name="new_post" handler={NewPost} />
                 <Route name="manage_posts" handler={ManagePosts} />
                 <Route name="manage_tags" handler={ManageTags} />
-                <Route name="manage_users" nandler={ManageUsers} />
+                <Route name="manage_users" handler={ManageUsers} />
                 <Route name="edit_post" path="admin/edit_post/:id" handler={EditPost}/>
             </Route> 
             <DefaultRoute handler={Home} />
